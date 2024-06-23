@@ -2,9 +2,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 from pandas.plotting import register_matplotlib_converters
-import calendar
-
 register_matplotlib_converters()
+import calendar
 
 # Function to read and clean data
 def clean_data(file_path):
@@ -18,6 +17,7 @@ def clean_data(file_path):
 df = clean_data('fcc-forum-pageviews.csv')
 
 def draw_line_plot():
+    
     fig, ax = plt.subplots(figsize=(10, 5))
     ax.plot(df.index, df['value'], color='red', linewidth=1)
     ax.set_title('Daily freeCodeCamp Forum Page Views 5/2016-12/2019')
@@ -30,11 +30,11 @@ def draw_line_plot():
     return fig
 
 def draw_bar_plot():
+    
     df_bar = df.copy()
     df_bar['year'] = df_bar.index.year
     df_bar['month'] = df_bar.index.month
-    df_bar_grouped = df_bar.groupby(['year', 'month'])['value'].mean().unstack()
-    
+    df_bar_grouped = df_bar.groupby(['year', 'month'])['value'].mean().unstack()   
     fig, ax = plt.subplots(figsize=(10, 6))
     df_bar_grouped.plot(kind='bar', ax=ax)
     ax.set_title('Average Daily Page Views per Month')
@@ -48,20 +48,18 @@ def draw_bar_plot():
     return fig
 
 def draw_box_plot():
+    
     df_box = df.copy()
     df_box.reset_index(inplace=True)
     df_box['year'] = df_box['date'].dt.year
     df_box['month'] = df_box['date'].dt.strftime('%b')
     df_box['month_num'] = df_box['date'].dt.month
-    df_box = df_box.sort_values('month_num')
-    
-    fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(15, 6))
-    
+    df_box = df_box.sort_values('month_num')    
+    fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(15, 6))    
     sns.boxplot(x='year', y='value', data=df_box, ax=axes[0])
     axes[0].set_title('Year-wise Box Plot (Trend)')
     axes[0].set_xlabel('Year')
-    axes[0].set_ylabel('Page Views')
-    
+    axes[0].set_ylabel('Page Views')   
     sns.boxplot(x='month', y='value', data=df_box, ax=axes[1])
     axes[1].set_title('Month-wise Box Plot (Seasonality)')
     axes[1].set_xlabel('Month')
